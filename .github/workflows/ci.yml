@@ -20,6 +20,7 @@ jobs:
       # No lockfile is committed, so this resolves the declared ranges fresh —
       # which also makes the job fail when a dependency range stops resolving.
       - run: npm install --no-audit --no-fund
-      # There is no test suite yet. Importing server.mjs would start the MCP
-      # server on stdio, so the gate is a parse check.
-      - run: node --check server.mjs
+      # The suite drives lib/run-code-tool.mjs with a fake sandbox, so it needs
+      # no E2B_API_KEY and no network. It still parse-checks server.mjs, which
+      # cannot be imported directly — importing it would start the stdio server.
+      - run: npm test
