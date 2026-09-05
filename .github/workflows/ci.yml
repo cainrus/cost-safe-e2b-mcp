@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # No lockfile is committed, so this resolves the declared ranges fresh —
+      # which also makes the job fail when a dependency range stops resolving.
+      - run: npm install --no-audit --no-fund
+      # There is no test suite yet. Importing server.mjs would start the MCP
+      # server on stdio, so the gate is a parse check.
+      - run: node --check server.mjs
