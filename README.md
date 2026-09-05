@@ -1,5 +1,7 @@
 # cost-safe-e2b-mcp
 
+[![CI](https://github.com/cainrus/cost-safe-e2b-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/cainrus/cost-safe-e2b-mcp/actions/workflows/ci.yml)
+
 An MCP server that runs Python in an [E2B](https://e2b.dev) sandbox and **kills the sandbox after
 every call**.
 
