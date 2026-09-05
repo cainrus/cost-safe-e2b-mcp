@@ -63,7 +63,7 @@ so it stops writing snippets that depend on a previous cell.
 | Variable | Required | Default | Meaning |
 |---|---|---|---|
 | `E2B_API_KEY` | yes | — | E2B API key, read by the SDK |
-| `E2B_TIMEOUT_MS` | no | `300000` | Hard sandbox timeout, in milliseconds |
+| `E2B_TIMEOUT_MS` | no | `300000` | Hard sandbox timeout, in milliseconds. Anything but a whole positive number falls back to the default, with a warning on stderr |
 | `E2B_TEMPLATE` | no | — | Custom sandbox template id |
 | `E2B_SANDBOX_*` | no | — | Forwarded into the sandbox with the prefix stripped |
 
