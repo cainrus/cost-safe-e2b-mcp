@@ -5,7 +5,7 @@
 An MCP server that runs Python in an [E2B](https://e2b.dev) sandbox and **kills the sandbox after
 every call**.
 
-It is a 69-line fork of [`@e2b/mcp-server`](https://github.com/e2b-dev/mcp-server) v0.2.3, which
+It is a 127-line fork of [`@e2b/mcp-server`](https://github.com/e2b-dev/mcp-server) v0.2.3, which
 creates a sandbox per `run_code` call and never kills it. The official server was archived on
 2026-04-16 with a deprecation notice, so the leak it ships with is now permanent.
 
