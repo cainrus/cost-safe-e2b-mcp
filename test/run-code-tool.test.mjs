@@ -88,6 +88,49 @@ describe("readConfig", () => {
   });
 });
 
+describe("E2B_TIMEOUT_MS validation", () => {
+  // timeoutMs is the hard timeout on every sandbox, and the backstop that
+  // collects one when kill() fails. A bad value must not reach Sandbox.create.
+  function read(raw) {
+    const logged = [];
+    const config = readConfig({ E2B_TIMEOUT_MS: raw }, (m) => logged.push(m));
+    return { timeoutMs: config.timeoutMs, logged };
+  }
+
+  it("keeps a whole positive number of milliseconds, and says nothing", () => {
+    const { timeoutMs, logged } = read("1500");
+    assert.equal(timeoutMs, 1500);
+    assert.deepEqual(logged, []);
+  });
+
+  it("falls back on a non-numeric value instead of passing NaN to the sandbox", () => {
+    const { timeoutMs, logged } = read("abc");
+    assert.equal(timeoutMs, DEFAULT_TIMEOUT_MS);
+    assert.equal(logged.length, 1);
+    assert.match(logged[0], /E2B_TIMEOUT_MS/);
+  });
+
+  it('falls back on "30s" rather than reading it as 30 milliseconds', () => {
+    const { timeoutMs, logged } = read("30s");
+    assert.equal(timeoutMs, DEFAULT_TIMEOUT_MS);
+    assert.equal(logged.length, 1);
+  });
+
+  it("falls back on zero and on a negative value", () => {
+    assert.equal(read("0").timeoutMs, DEFAULT_TIMEOUT_MS);
+    assert.equal(read("-1").timeoutMs, DEFAULT_TIMEOUT_MS);
+  });
+
+  it("treats an empty or whitespace value as unset, without a warning", () => {
+    assert.equal(read("").timeoutMs, DEFAULT_TIMEOUT_MS);
+    assert.deepEqual(read("   ").logged, []);
+  });
+
+  it("ignores surrounding whitespace on a good value", () => {
+    assert.equal(read(" 1500 ").timeoutMs, 1500);
+  });
+});
+
 describe("listTools", () => {
   it("exposes exactly one tool, run_code", () => {
     const { tools } = listTools(readConfig({}));
